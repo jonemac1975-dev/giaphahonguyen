@@ -1,14 +1,14 @@
 import {
-  getNotices,
-  addNotice,
-  updateNotice,
-  deleteNotice
+  getBooks,
+  addBook,
+  updateBook,
+  deleteBook
 } from "/src/services/contentService.js";
 
 let inited = false;
 let currentEditId = null;
 
-window.loadTab3 = async function () {
+window.loadTab9 = async function () {
   if (inited) return;
   inited = true;
 
@@ -17,24 +17,24 @@ window.loadTab3 = async function () {
   ====================== */
   const $ = id => document.getElementById(id);
 
-  const noticeTitle   = $("notice-title");
-  const noticeSummary = $("notice-summary");
-  const noticeContent = $("notice-content");
-  const noticeLink    = $("notice-link");
+  const bookTitle   = $("book-title");
+  const bookSummary = $("book-summary");
+  const bookContent = $("book-content");
+  const bookLink    = $("book-link");
 
-  const noticeAdd   = $("notice-add");
-  const noticeSave  = $("notice-save");
-  const noticeClear = $("notice-clear");
-  const noticeList  = $("notice-list");
+  const bookAdd   = $("book-add");
+  const bookSave  = $("book-save");
+  const bookClear = $("book-clear");
+  const bookList  = $("book-list");
 
   const btnInsertImage = $("btn-insert-image");
   const btnInsertPDF   = $("btn-insert-pdf");
   const btnInsertVideo = $("btn-insert-video");
   const btnInsertAudio = $("btn-insert-audio");
-  const imageInput     = $("notice-image");
+  const imageInput     = $("book-image");
 
-  if (!noticeTitle || !noticeContent || !noticeAdd || !noticeList) {
-    console.error("Tab3 DOM missing");
+  if (!bookTitle || !bookContent || !bookAdd || !bookList) {
+    console.error("Tab9 DOM missing");
     return;
   }
 
@@ -42,12 +42,12 @@ window.loadTab3 = async function () {
      EDITOR UTILS
   ====================== */
   function insertHTML(html) {
-    noticeContent.focus();
+    bookContent.focus();
 
     if (document.queryCommandSupported("insertHTML")) {
       document.execCommand("insertHTML", false, html);
     } else {
-      noticeContent.innerHTML += html;
+      bookContent.innerHTML += html;
     }
   }
 
@@ -59,7 +59,7 @@ window.loadTab3 = async function () {
       .replace(/<\/?span[^>]*>/gi, "");
   }
 
-  noticeContent.addEventListener("paste", e => {
+  bookContent.addEventListener("paste", e => {
     e.preventDefault();
     const text = (e.clipboardData || window.clipboardData).getData("text/html")
       || (e.clipboardData || window.clipboardData).getData("text/plain");
@@ -92,26 +92,31 @@ imageInput?.addEventListener("change", () => {
   /* ======================
      INSERT PDF / FLIP
   ====================== */
-  btnInsertPDF?.addEventListener("click", () => {
-  let url = prompt("Dán link PDF (Google Drive / FlipHTML5):");
+  const btnInsertFlip = $("btn-insert-flip");
+
+btnInsertFlip?.addEventListener("click", () => {
+
+  let url = prompt("Dán link FlipHTML5 hoặc PDF Google Drive:");
   if (!url) return;
 
-  // Google Drive → convert sang preview
+  // nếu là Google Drive
   if (url.includes("drive.google.com")) {
     const id = url.match(/\/d\/([^/]+)/)?.[1];
     if (!id) return alert("Link Drive không hợp lệ");
+
     url = `https://drive.google.com/file/d/${id}/preview`;
   }
 
   insertHTML(`
-    <div class="media pdf" style="margin:12px 0">
+    <div style="margin:20px 0">
       <iframe
         src="${url}"
-        style="width:100%;height:600px;border:0"
+        style="width:100%;height:700px;border:none"
         loading="lazy">
       </iframe>
     </div>
   `);
+
 });
 
   /* ======================
@@ -122,7 +127,7 @@ imageInput?.addEventListener("change", () => {
     return m ? m[1] : null;
   }
 
- btnInsertVideo.onclick = () => {
+btnInsertVideo?.addEventListener("click", () => {
   const url = prompt("Dán link MP4 Google Drive hoặc YouTube:");
   if (!url) return;
 
@@ -157,14 +162,14 @@ imageInput?.addEventListener("change", () => {
       </iframe>
     </div>
   `);
-};
+});
 
 
   
   /* ======================
    INSERT AUDIO
 ====================== */
-btnInsertAudio.onclick = () => {
+btnInsertAudio?.addEventListener("click", () => {
   const url = prompt("Dán link MP3 Google Drive:");
   if (!url) return;
 
@@ -180,16 +185,16 @@ btnInsertAudio.onclick = () => {
       </iframe>
     </div>
   `);
-};
+});
 
 
 
   /* ======================
      LOAD LIST
   ====================== */
-  async function loadNotices() {
-    noticeList.innerHTML = "";
-    const data = await getNotices();
+  async function loadBook() {
+    bookList.innerHTML = "";
+    const data = await getBooks();
     if (!data?.length) return;
 
     data.sort((a, b) => b.createdAt - a.createdAt);
@@ -200,85 +205,85 @@ btnInsertAudio.onclick = () => {
         <td>${i + 1}</td>
         <td>${it.title || ""}</td>
         <td>${it.createdAt ? new Date(it.createdAt).toLocaleDateString("vi-VN") : ""}</td>
-        <a href="/notice.html?type=notice&id=${it.id}" target="_blank">Xem</a>
+        <a href="/notice.html?type=book&id=${it.id}" target="_blank">Xem</a>
         <td>
           <button class="edit">Sửa</button>
           <button class="del">Xóa</button>
         </td>
       `;
 
-      tr.querySelector(".edit").onclick = () => editNotice(it);
-      tr.querySelector(".del").onclick  = () => removeNotice(it.id);
+      tr.querySelector(".edit").onclick = () => editBook(it);
+      tr.querySelector(".del").onclick  = () => removeBook(it.id);
 
-      noticeList.appendChild(tr);
+      bookList.appendChild(tr);
     });
   }
 
   /* ======================
      CRUD
   ====================== */
-  function editNotice(it) {
-    noticeTitle.value   = it.title || "";
-    noticeSummary.value = it.summary || "";
-    noticeContent.innerHTML = it.content || "";
-    noticeLink.value    = it.link || "";
+  function editBook(it) {
+    bookTitle.value   = it.title || "";
+    bookSummary.value = it.summary || "";
+    bookContent.innerHTML = it.content || "";
+    bookLink.value    = it.link || "";
 
     currentEditId = it.id;
-    noticeAdd.disabled  = true;
-    noticeSave.disabled = false;
+    bookAdd.disabled  = true;
+    bookSave.disabled = false;
   }
 
-  async function removeNotice(id) {
+  async function removeBook(id) {
     if (!confirm("Xóa thông báo này?")) return;
-    await deleteNotice(id);
-    loadNotices();
+    await deleteBook(id);
+    loadBook();
   }
 
-  noticeAdd.onclick = async () => {
-    const title = noticeTitle.value.trim();
+  bookAdd.onclick = async () => {
+    const title = bookTitle.value.trim();
     if (!title) return alert("Nhập tiêu đề");
 
-    await addNotice({
-      title,
-      summary: noticeSummary.value.trim(),
-      content: noticeContent.innerHTML,
-      link: noticeLink.value.trim(),
-      status: 1,
-      createdAt: Date.now()
-    });
+    await updateBook("giapha", {
+  title,
+  summary: bookSummary.value.trim(),
+  content: bookContent.innerHTML,
+  link: bookLink.value.trim(),
+  status: 1,
+  createdAt: Date.now()
+});
 
     clearForm();
-    loadNotices();
+    loadBook();
   };
 
-  noticeSave.onclick = async () => {
+  bookSave.onclick = async () => {
     if (!currentEditId) return;
 
-    await updateNotice(currentEditId, {
-      title: noticeTitle.value.trim(),
-      summary: noticeSummary.value.trim(),
-      content: noticeContent.innerHTML,
-      link: noticeLink.value.trim(),
+    await updateBook(currentEditId, {
+      title: bookTitle.value.trim(),
+      summary: bookSummary.value.trim(),
+      content: bookContent.innerHTML,
+      link: bookLink.value.trim(),
       updatedAt: Date.now()
     });
 
     clearForm();
-    loadNotices();
+    loadBook();
   };
 
   function clearForm() {
-    noticeTitle.value = "";
-    noticeSummary.value = "";
-    noticeContent.innerHTML = "";
-    noticeLink.value = "";
+    bookTitle.value = "";
+    bookSummary.value = "";
+    bookContent.innerHTML = "";
+    bookLink.value = "";
 
     currentEditId = null;
-    noticeAdd.disabled = false;
-    noticeSave.disabled = true;
+    bookAdd.disabled = false;
+    bookSave.disabled = true;
   }
 
-  noticeClear.onclick = clearForm;
+  bookClear.onclick = clearForm;
 
-  noticeSave.disabled = true;
-  loadNotices();
+  bookSave.disabled = true;
+  loadBook();
 };

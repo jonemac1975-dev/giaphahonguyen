@@ -1135,3 +1135,144 @@ html, body {
 .modal-actions button {
   margin-left: 6px;
 }
+
+
+
+/* =========================================================
+  TAB9: SÁCH GIA PHẢ
+========================================================= */
+#tab9 table {
+  width: 70%;
+  border-collapse: collapse;
+  flex: 1 1 50%; /* 50% bề ngang màn hình */
+}
+
+#tab9 table th,
+#tab9 table td {
+
+  border: 1px solid var(--color-border, #e5e7eb);
+  padding: 6px 8px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+#tab9 table td:last-child {
+  text-align: center;
+}
+
+/* nút xóa [X] */
+#tab9 table td:last-child .btn-xoa {
+  background: #dc2626;
+  border: 1px solid #dc2626;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+
+#tab9 table td:last-child .btn-xoa:hover {
+  background: #b91c1c;
+}
+
+/* responsive – màn hình nhỏ xuống 1 cột */
+@media (max-width: 900px) {
+  #tab9 .group:first-of-type,
+  #tab9 .group:nth-of-type(2),
+  #tab9 table {
+    flex: 1 1 100%;
+  }
+
+  #tab9 .group label {
+    width: 100%;
+  }
+}
+
+.content img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 12px auto;
+  border-radius: 6px;
+}
+
+/* căn trái / phải nếu cần */
+.content img.left {
+  float: left;
+  margin: 8px 12px 8px 0;
+  max-width: 45%;
+}
+
+.content img.right {
+  float: right;
+  margin: 8px 0 8px 12px;
+  max-width: 45%;
+}
+
+/* ===== NỘI DUNG THÔNG BÁO ===== */
+.book-content img,
+#content img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  box-sizing: border-box;
+}
+
+/* căn giữa */
+.book-content img.center,
+#content img.center {
+  margin: 12px auto;
+}
+
+/* căn phải */
+.book-content img.right,
+#content img.right {
+  float: right;
+  max-width: 60%;
+  margin: 8px 0 8px 12px;
+}
+
+@media (max-width: 768px) {
+  #content img.right {
+    float: none !important;
+    display: block;
+    max-width: 100% !important;
+    margin: 12px auto !important;
+  }
+}
+
+#content img.right {
+  float: right;
+  max-width: 60%;
+  margin: 8px 0 8px 12px;
+}
+
+@media (max-width: 768px) {
+  #content img.right {
+    float: none !important;
+    display: block;
+    max-width: 100% !important;
+    margin: 12px auto !important;
+  }
+}
+
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+#content img {
+  display: block;
+  max-width: 100% !important;
+  height: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#book-content iframe{
+  width:100%;
+  max-width:100%;
+  border:none;
+}

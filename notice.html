@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Thông báo</title>
+
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <style>
@@ -13,12 +14,12 @@
       padding: 0;
     }
     .wrap {
-      max-width: 800px;
-      margin: 20px auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 6px;
-    }
+  width: 96%;
+  margin: 20px auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 6px;
+}
     h1 {
       font-size: 22px;
       color: #8b0000;
@@ -72,12 +73,23 @@ html, body {
 
 * { box-sizing: border-box }
 html, body { overflow-x:hidden }
+#content iframe{
+  width:100%;
+  min-height:600px;
+  border:0;
+}
+
+#content video{
+  width:100%;
+  height:auto;
+}
 
   </style>
 </head>
 <body>
 
 <div class="wrap">
+
   <h1 id="title">Đang tải...</h1>
   <div class="date" id="date"></div>
   <div class="content" id="content"></div>
